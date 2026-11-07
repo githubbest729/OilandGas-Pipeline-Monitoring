@@ -1,6 +1,3 @@
-Here is the complete **System Architecture** section formatted directly in Markdown so you can copy and paste it straight into your project's `README.md`.
-
----
 
 ```markdown
 ## 🏗️ System Architecture
