@@ -1,0 +1,51 @@
+Tag Name,Type,Description,Calibrated Range,Siemens S7 Address,Rockwell Address,IEC-104 IOA,DNP3 Point,Trip LL,Trip HH,Scan Rate,Safety SIL,Station,Wiring / Protocol
+10-PT-101A,AI,Trunkline Inlet Pressure Train A,0.0 to 100.0 bar g,%IW64,Local:3:I.Ch0,1001,30:0,38.0,82.0,100 ms,SIL-2,BVS-01,4-20mA HART
+10-PT-101B,AI,Trunkline Inlet Pressure Train B,0.0 to 100.0 bar g,%IW66,Local:3:I.Ch1,1002,30:1,38.0,82.0,100 ms,SIL-2,BVS-01,4-20mA HART
+10-PT-101C,AI,Trunkline Inlet Pressure Train C,0.0 to 100.0 bar g,%IW68,Local:3:I.Ch2,1003,30:2,38.0,82.0,100 ms,SIL-2,BVS-01,4-20mA HART
+10-TT-102A,AI,Inlet Product Temperature,-20.0 to 90.0 deg C,%IW70,Local:3:I.Ch3,1004,30:3,-5.0,65.0,1000 ms,Standard,BVS-01,Pt100 4-wire
+10-PDT-105,AI,Differential Pressure Across LBV-04,0.0 to 5.0 bar,%IW72,Local:3:I.Ch4,1005,30:4,-,3.0,200 ms,SIL-2,BVS-01,4-20mA HART
+10-FT-103A,AI,Inlet Fiscal Ultrasonic Flow Meter,0 to 8000 m3/h,%IW74,Local:3:I.Ch5,1006,30:5,300,7500,250 ms,Custody,BVS-01,Modbus/OPC
+10-FGS-101,AI,Station Combustible Gas Detector,0 to 100 % LEL,%IW76,Local:3:I.Ch6,1007,30:6,-,20 / 60,200 ms,SIL-2,BVS-01,Optical IR
+10-FGS-102,AI,Hydrogen Sulfide (H2S) Detector,0 to 100 ppm,%IW78,Local:3:I.Ch7,1008,30:7,-,10 / 25,200 ms,SIL-2,BVS-01,Electrochemical
+10-ESDV-101-ZSO,DI,Inlet ESDV-101 Fully Open Limit,"0 = Not Open, 1 = Open",%I8.0,Local:4:I.Pt00,101,1:0,-,-,50 ms,SIL-3,BVS-01,Dry Contact NAMUR
+10-ESDV-101-ZSC,DI,Inlet ESDV-101 Fully Closed Limit,"0 = Not Closed, 1 = Closed",%I8.1,Local:4:I.Pt01,102,1:1,-,-,50 ms,SIL-3,BVS-01,Dry Contact NAMUR
+10-LBV-04-ZSO,DI,Mainline LBV-04 Fully Open Limit,"0 = Not Open, 1 = Open",%I8.2,Local:4:I.Pt02,103,1:2,-,-,50 ms,SIL-3,BVS-01,Dry Contact NAMUR
+10-LBV-04-ZSC,DI,Mainline LBV-04 Fully Closed Limit,"0 = Not Closed, 1 = Closed",%I8.3,Local:4:I.Pt03,104,1:3,-,-,50 ms,SIL-3,BVS-01,Dry Contact NAMUR
+10-MOV-102-ZSO,DI,Bypass Equalizing Valve Open,"0 = Closed, 1 = Open",%I8.4,Local:4:I.Pt04,105,1:4,-,-,100 ms,Standard,BVS-01,Auxiliary Contact
+10-MOV-102-ZSC,DI,Bypass Equalizing Valve Closed,"0 = Open, 1 = Closed",%I8.5,Local:4:I.Pt05,106,1:5,-,-,100 ms,Standard,BVS-01,Auxiliary Contact
+10-ESD-PB01,DI,Manual Field ESD Pushbutton,"0 = Healthy, 1 = Depressed",%I8.6,Local:4:I.Pt06,107,1:6,-,-,20 ms,SIL-3,BVS-01,Break-Glass Contact
+10-SPD-ALM,DI,Surge Protection Device Fault,"0 = Healthy, 1 = SPD Trip",%I8.7,Local:4:I.Pt07,108,1:7,-,-,500 ms,Diagnostic,BVS-01,Telemetry Alarm
+10-SOLAR-V,AI,24VDC Solar Array Bus Voltage,0.0 to 40.0 VDC,%IW80,Local:5:I.Ch0,1009,30:8,11.2,32.0,1000 ms,Diagnostic,BVS-01,Analog Transducer
+10-BATT-SOC,AI,LiFePO4 Battery State of Charge,0 to 100 %,%IW82,Local:5:I.Ch1,1010,30:9,25,-,1000 ms,Diagnostic,BVS-01,RS-485 BMS
+10-ENCL-TEMP,AI,NEMA 4X Interior Cabinet Temp,-10 to 80 deg C,%IW84,Local:5:I.Ch2,1011,30:10,-,65.0,1000 ms,Diagnostic,BVS-01,Internal RTD
+10-ESDV-101-SOV,DO,Trip Solenoid ESDV-101 Valve,"0 = De-energize (Trip), 1 = Energize",%Q8.0,Local:6:O.Pt00,201,12:0,-,-,10 ms,SIL-3,BVS-01,24VDC 15W Solenoid
+10-LBV-04-SOV,DO,Trip Solenoid LBV-04 Valve,"0 = De-energize (Trip), 1 = Energize",%Q8.1,Local:6:O.Pt01,202,12:1,-,-,10 ms,SIL-3,BVS-01,Gas-Over-Oil SOV
+10-MOV-102-OP,DO,Open Command Bypass MOV-102,1 = Pulse Open,%Q8.2,Local:6:O.Pt02,203,12:2,-,-,100 ms,Standard,BVS-01,Interposing Relay
+10-MOV-102-CL,DO,Close Command Bypass MOV-102,1 = Pulse Close,%Q8.3,Local:6:O.Pt03,204,12:3,-,-,100 ms,Standard,BVS-01,Interposing Relay
+10-SIREN-CMD,DO,Audio/Visual Desert Strobe Beacon,1 = Alarm Strobe Active,%Q8.4,Local:6:O.Pt04,205,12:4,-,-,50 ms,Safety,BVS-01,24VDC Xenon Strobe
+20-PT-201,AI,Pump Suction Header Pressure,0.0 to 100.0 bar g,%IW100,Local:7:I.Ch0,1012,30:11,15.0,75.0,100 ms,SIL-2,PS-02,4-20mA HART
+20-PT-202,AI,Pump Discharge Header Pressure,0.0 to 150.0 bar g,%IW102,Local:7:I.Ch1,1013,30:12,20.0,125.0,100 ms,SIL-2,PS-02,4-20mA HART
+20-TT-201,AI,Pump Bearing Temperature DE,0.0 to 150.0 deg C,%IW104,Local:7:I.Ch2,1014,30:13,-,95.0,500 ms,Standard,PS-02,Duplex RTD
+20-VT-201,AI,Pump Casing Overall Vibration,0.0 to 25.0 mm/s RMS,%IW106,Local:7:I.Ch3,1015,30:14,-,7.1 / 11.2,100 ms,ISO-10816,PS-02,4-20mA Piezo
+20-PUMP-RUN,DI,Booster Pump P-201A Run Feedback,"0 = Stopped, 1 = Running",%I10.0,Local:8:I.Pt00,109,1:8,-,-,100 ms,Standard,PS-02,Auxiliary Contact
+20-PUMP-TRIP,DI,Pump P-201A VFD Protective Trip,"0 = Normal, 1 = VFD Fault",%I10.1,Local:8:I.Pt01,110,1:9,-,-,50 ms,Standard,PS-02,Fault Relay
+20-PUMP-START,DO,Booster Pump P-201A Start Command,1 = Start Permissive Pulse,%Q10.0,Local:9:O.Pt00,206,12:5,-,-,100 ms,Standard,PS-02,Interposing Relay
+20-PUMP-STOP,DO,Booster Pump P-201A Normal Stop,1 = Stop Ramp Pulse,%Q10.1,Local:9:O.Pt01,207,12:6,-,-,100 ms,Standard,PS-02,Interposing Relay
+20-PUMP-ESD,DO,Emergency Trip Pump P-201A,0 = Trip Power Circuit Breaker,%Q10.2,Local:9:O.Pt02,208,12:7,-,-,10 ms,SIL-2,PS-02,De-energize Trip
+20-PCV-201-AO,AO,Suction Pressure Control Valve,0.0 to 100.0 % Output,%QW100,Local:10:O.Ch0,2001,40:0,-,-,100 ms,Standard,PS-02,4-20mA Electro-Pneu
+30-PT-301,AI,Mountain Section Slack-Line Pressure,0.0 to 60.0 bar g,%IW120,Local:11:I.Ch0,1016,30:15,2.0,48.0,50 ms,SIL-2,BVS-03,4-20mA HART
+30-PT-302,AI,Downhill Section Backpressure,0.0 to 120.0 bar g,%IW122,Local:11:I.Ch1,1017,30:16,10.0,98.0,50 ms,SIL-2,BVS-03,4-20mA HART
+30-LBV-06-ZSO,DI,Mountain Crest Block Valve Open,"0 = Closed, 1 = Open",%I12.0,Local:12:I.Pt00,111,1:10,-,-,50 ms,SIL-3,BVS-03,Dry Contact NAMUR
+30-LBV-06-ZSC,DI,Mountain Crest Block Valve Closed,"0 = Open, 1 = Closed",%I12.1,Local:12:I.Pt01,112,1:11,-,-,50 ms,SIL-3,BVS-03,Dry Contact NAMUR
+30-LBV-06-SOV,DO,Trip Mountain Crest LBV-06,0 = De-energize Trip,%Q12.0,Local:13:O.Pt00,209,12:8,-,-,10 ms,SIL-3,BVS-03,Gas-Over-Oil SOV
+30-VSAT-RSSI,AI,VSAT Microwave Signal Margin,0.0 to 20.0 dB,%IW124,Local:11:I.Ch2,1018,30:17,3.0,-,1000 ms,Diagnostic,BVS-03,SNMP / Modbus
+40-PT-401,AI,Terminal Receiving Header Pressure,0.0 to 60.0 bar g,%IW140,Local:14:I.Ch0,1019,30:18,1.5,45.0,100 ms,SIL-2,TERM-01,4-20mA HART
+40-TT-401,AI,Terminal Receiving Temperature,-10.0 to 80.0 deg C,%IW142,Local:14:I.Ch1,1020,30:19,-,55.0,500 ms,Standard,TERM-01,Pt100 4-wire
+40-FT-402A,AI,Terminal Custody Coriolis Meter Flow,0 to 8000 m3/h,%IW144,Local:14:I.Ch2,1021,30:20,250,7200,100 ms,Custody,TERM-01,Modbus TCP
+40-DENS-401,AI,Product Fiscal Density (Coriolis),600 to 1100 kg/m3,%IW146,Local:14:I.Ch3,1022,30:21,780,920,250 ms,Custody,TERM-01,Modbus TCP
+40-BSW-401,AI,Water-in-Oil BSW Monitor,0.00 to 5.00 % H2O,%IW148,Local:14:I.Ch4,1023,30:22,-,0.50,1000 ms,Fiscal,TERM-01,Microwave Analyzer
+40-ESDV-401-ZSO,DI,Terminal Inlet ESDV Open Limit,"0 = Closed, 1 = Open",%I14.0,Local:15:I.Pt00,113,1:12,-,-,50 ms,SIL-3,TERM-01,Dry Contact NAMUR
+40-ESDV-401-ZSC,DI,Terminal Inlet ESDV Closed Limit,"0 = Open, 1 = Closed",%I14.1,Local:15:I.Pt01,114,1:13,-,-,50 ms,SIL-3,TERM-01,Dry Contact NAMUR
+40-BDV-405-SOV,DO,Terminal Flare Blowdown Valve BDV,1 = Energize Open to Flare,%Q14.0,Local:16:O.Pt00,210,12:9,-,-,10 ms,SIL-3,TERM-01,Dual SOV 24VDC
+40-TK-101-LT,AI,Crude Storage Tank 101 Radar Level,0.0 to 22.0 meters,%IW150,Local:14:I.Ch5,1024,30:23,1.5,20.5,1000 ms,SIL-2,TERM-01,FMCW Radar 80GHz
+40-TK-102-LT,AI,Crude Storage Tank 102 Radar Level,0.0 to 22.0 meters,%IW152,Local:14:I.Ch6,1025,30:24,1.5,20.5,1000 ms,SIL-2,TERM-01,FMCW Radar 80GHz
