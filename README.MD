@@ -1,5 +1,3 @@
-
-```markdown
 ## 🏗️ System Architecture
 
 The Oil & Gas Pipeline Monitoring PWA follows a zero-dependency, edge-first architecture engineered for field engineers operating in harsh, low-bandwidth, and remote desert environments (e.g., UAE pipeline corridors).
