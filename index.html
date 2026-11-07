@@ -85,6 +85,9 @@
     <button class="tab" role="tab" id="tabbtn-calc" data-tab="calc" aria-selected="false" aria-controls="tab-calc">Field Calculators</button>
     <button class="tab" role="tab" id="tabbtn-glance" data-tab="glance" aria-selected="false" aria-controls="tab-glance">Lockscreen Field View</button>
     <button class="tab" role="tab" id="tabbtn-sat" data-tab="sat" aria-selected="false" aria-controls="tab-sat">SAT Checklist</button>
+    <button class="tab" role="tab" id="tabbtn-io" data-tab="io" aria-selected="false" aria-controls="tab-io">Master I/O &amp; Telemetry</button>
+    <button class="tab" role="tab" id="tabbtn-cyber" data-tab="cyber" aria-selected="false" aria-controls="tab-cyber">OT Cyber (IEC 62443)</button>
+    <button class="tab" role="tab" id="tabbtn-fat" data-tab="fat" aria-selected="false" aria-controls="tab-fat">FAT Protocol</button>
   </nav>
 </header>
 
@@ -292,7 +295,7 @@
       <div class="abar" id="ab-press" data-zone="spec">
         <div class="abar-head"><span>PT-101 Trunkline pressure</span><b id="ab-press-v">64.2 bar</b></div>
         <div class="abar-track"><div class="abar-zones"><i class="z-trip" style="width:20%"></i><i class="z-warn" style="width:10%"></i><i class="z-spec" style="width:40%"></i><i class="z-warn" style="width:10%"></i><i class="z-trip" style="width:20%"></i></div><div class="abar-fill" id="ab-press-f" style="width:64%"></div><div class="abar-mark" id="ab-press-m" style="left:64%"></div></div>
-        <div class="abar-scale"><span>0</span><span>25</span><span>50</span><span>70</span><span>100 bar</span></div>
+        <div class="abar-scale"><span>0</span><span>25</span><span>50</span><span>75</span><span>100 bar</span></div>
       </div>
       <div class="abar" id="ab-dp" data-zone="spec">
         <div class="abar-head"><span>PDT-105 DP across LBV-04</span><b id="ab-dp-v">0.12 bar</b></div>
@@ -309,7 +312,7 @@
       <div class="glyph-row">
         <button class="vg" type="button" data-tag="ESD-01" data-state="open"><svg viewBox="0 0 56 40"><polygon class="body" points="8,6 28,20 8,34"/><polygon class="body" points="48,6 28,20 48,34"/></svg><span class="t">ESD-01</span><span class="s">Open</span></button>
         <button class="vg" type="button" data-tag="MOV-102" data-state="closed"><svg viewBox="0 0 56 40"><polygon class="body" points="8,6 28,20 8,34"/><polygon class="body" points="48,6 28,20 48,34"/></svg><span class="t">MOV-102</span><span class="s">Closed</span></button>
-        <button class="vg" type="button" data-tag="LBV-04" data-state="transit"><svg viewBox="0 0 56 40"><polygon class="body" points="8,6 28,20 8,34"/><polygon class="body" points="48,6 28,20 48,34"/></svg><span class="t">LBV-04</span><span class="s">Transitioning</span></button>
+        <button class="vg" type="button" data-tag="LBV-04" data-state="transit"><svg viewBox="0 0 56 40"><defs><linearGradient id="halfFill" x1="0" x2="1"><stop offset="0.5" stop-color="#22d3ee" stop-opacity=".5"/><stop offset="0.5" stop-color="#22d3ee" stop-opacity="0"/></linearGradient></defs><polygon class="body" points="8,6 28,20 8,34"/><polygon class="body" points="48,6 28,20 48,34"/></svg><span class="t">LBV-04</span><span class="s">Transitioning</span></button>
         <button class="vg" type="button" data-tag="LBV-05" data-state="fault"><svg viewBox="0 0 56 40"><polygon class="body" points="8,6 28,20 8,34"/><polygon class="body" points="48,6 28,20 48,34"/></svg><span class="t">LBV-05</span><span class="s">Travel fault</span></button>
       </div>
 
@@ -348,6 +351,12 @@
       <li><b>Action:</b> close the LBV on both sides of the break. Closure must not depend on comms. The RTU holds the trip latched until a deliberate reset.</li>
       <li><b>Surge:</b> upstream closure timing must limit surge below the MAOP margin. Verify stroke times during PST and SAT.</li>
       <li><b>Bypass:</b> time-limited, logged, and visible on every HMI level.</li>
+    </ul>
+    <h3 style="margin-top:14px">RTTM and mass-balance leak detection (LDS)</h3>
+    <ul class="clean">
+      <li><b>Mass balance:</b> compensated inlet vs. outlet flow with line-pack correction. Simple, robust, slow for small leaks.</li>
+      <li><b>RTTM:</b> a hydraulic model runs in parallel with measured data; residuals between model and measurements flag leaks and locate them. Needs good instrumentation and model tuning.</li>
+      <li>API RP 1130 (computational pipeline monitoring), API RP 1155 and API 1175 (leak detection programme) are the usual references. Specify sensitivity, reliability, robustness and accuracy as separate acceptance criteria and prove them in testing.</li>
     </ul>
   </div>
 </section>
@@ -545,6 +554,190 @@
   <div id="satList"></div>
 </section>
 
+
+<!-- ================= MASTER I/O & TELEMETRY ================= -->
+<section class="panel" id="tab-io" role="tabpanel" aria-labelledby="tabbtn-io">
+  <div class="panel-head">
+    <h2>Master I/O Schedule &amp; Telemetry Address Map</h2>
+    <p>50-point engineering signal list and protocol registers (IEC 60870-5-104 IOA &amp; DNP3 Group/Index) for AGAC Habshan-Fujairah pipeline.</p>
+  </div>
+
+  <div class="card">
+    <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;margin-bottom:12px">
+      <div>
+        <h3 style="margin:0">Master Pipeline Signal Database</h3>
+        <span class="small muted">Filter by Signal Type, Station, or search tags</span>
+      </div>
+      <div class="btn-row" style="margin:0">
+        <button class="btn primary" id="btnExportIoCsv" type="button">Export I/O Schedule (CSV)</button>
+        <button class="btn" id="btnExportIec104" type="button">Export IEC-104 Map (CSV)</button>
+      </div>
+    </div>
+
+    <div class="form-grid" style="grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); margin-bottom:14px">
+      <div class="field">
+        <label for="ioFilterType">Signal Type</label>
+        <select id="ioFilterType">
+          <option value="ALL">All Types (AI, DI, DO, AO)</option>
+          <option value="AI">AI (Analog Input - 4-20mA)</option>
+          <option value="DI">DI (Digital Input - 24VDC)</option>
+          <option value="DO">DO (Digital Output - Solenoid)</option>
+          <option value="AO">AO (Analog Output - Control)</option>
+        </select>
+      </div>
+      <div class="field">
+        <label for="ioFilterStation">Location / Station</label>
+        <select id="ioFilterStation">
+          <option value="ALL">All Stations</option>
+          <option value="BVS-01">BVS-01 (Habshan KM 48)</option>
+          <option value="PS-02">PS-02 (Booster KM 150)</option>
+          <option value="BVS-03">BVS-03 (Mountain KM 280)</option>
+          <option value="TERM-01">TERM-01 (Fujairah Terminal)</option>
+        </select>
+      </div>
+      <div class="field">
+        <label for="ioSearch">Search Tag / Description</label>
+        <input type="text" id="ioSearch" placeholder="e.g. PT-101, ESDV, 64.2, SIL">
+      </div>
+    </div>
+
+    <div class="table-wrap" style="max-height:520px; overflow-y:auto">
+      <table id="ioTable">
+        <thead>
+          <tr>
+            <th>Tag Name</th>
+            <th>Type</th>
+            <th>Description &amp; Range</th>
+            <th>PLC Address (S7 / Logix)</th>
+            <th>IEC-104 IOA</th>
+            <th>DNP3 (Grp/Idx)</th>
+            <th>Trip (LL / HH)</th>
+            <th>SIL</th>
+          </tr>
+        </thead>
+        <tbody id="ioTableBody">
+          <!-- Populated dynamically via app.js -->
+        </tbody>
+      </table>
+    </div>
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-top:10px" class="small muted">
+      <span id="ioCountReadout">Showing 50 signals</span>
+      <span>Standards: ISA-5.1 • IEC 60870-5-104 • IEEE 1815 (DNP3)</span>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>Vendor Configuration Artifacts (Siemens TIA Portal &amp; Rockwell Studio 5000)</h3>
+    <p class="muted small">Directly copy or export turnkey data structures (UDTs) and Add-On Instructions (AOI) for immediate project import.</p>
+    <div class="btn-row">
+      <button class="chip" id="btnShowSclUdt" type="button">Siemens TIA SCL UDT (typeTransmitter)</button>
+      <button class="chip" id="btnShowL5x" type="button">Rockwell Studio 5000 AOI (L5X XML)</button>
+      <button class="chip" id="btnDownloadArtifacts" type="button">Download All SCL/L5X Files (.ZIP)</button>
+    </div>
+    <div class="code-card" style="margin-top:12px">
+      <div class="code-head">
+        <h3 id="artifactTitle" style="font-family:var(--mono);font-size:0.92rem">Siemens TIA Portal V18/V19/V21 User Data Type: typeTransmitter.scl</h3>
+        <div>
+          <span class="copy-badge" id="badge-artifact">COPIED!</span>
+          <button class="chip" id="btnCopyArtifact" type="button">Copy Code</button>
+        </div>
+      </div>
+      <pre id="artifactPre"><code id="artifactCode"></code></pre>
+    </div>
+  </div>
+</section>
+
+<!-- ================= OT CYBERSECURITY & NETWORK ================= -->
+<section class="panel" id="tab-cyber" role="tabpanel" aria-labelledby="tabbtn-cyber">
+  <div class="panel-head">
+    <h2>OT Cybersecurity Architecture (IEC 62443 / Purdue Model)</h2>
+    <p>Defense-in-depth network segmentation, industrial demilitarized zone (IDMZ), and exact firewall conduit rule matrix for UAE pipeline SCADA.</p>
+  </div>
+
+  <div class="card">
+    <h3>Purdue Model Zone &amp; Conduit Topology (Level 0 to Level 4)</h3>
+    <svg viewBox="0 0 740 330" role="img" aria-label="IEC 62443 Network Architecture Diagram" style="width:100%;height:auto;border-radius:12px;background:#050810;border:1px solid var(--line);padding:10px">
+      <rect width="740" height="330" rx="10" fill="#060a16"/>
+      <!-- Level 4 Enterprise -->
+      <rect x="20" y="15" width="700" height="42" rx="6" fill="#111827" stroke="#374151" stroke-width="1.5"/>
+      <text x="35" y="40" fill="#9ca3af" font-size="12" font-weight="700">LEVEL 4 &middot; Enterprise Network (ERP, Corporate IT, AGAC HQ Office)</text>
+      
+      <!-- IDMZ Firewall Conduit -->
+      <rect x="20" y="65" width="700" height="46" rx="6" fill="rgba(239,68,68,0.12)" stroke="#ef4444" stroke-width="1.5" stroke-dasharray="4 3"/>
+      <text x="35" y="85" fill="#f87171" font-size="11" font-weight="700">CONDUIT 1 &middot; Industrial DMZ (IDMZ Firewall - Palo Alto / FortiGate OT)</text>
+      <text x="35" y="101" fill="#9ca3af" font-size="10">Terminates all direct IT/OT traffic. Reverse Proxy, Jump Server (MFA), Patch Mirror, Read-Only Historian Replica</text>
+
+      <!-- Level 3 Operations -->
+      <rect x="20" y="120" width="700" height="52" rx="6" fill="#15213d" stroke="#5ec8ff" stroke-width="1.5"/>
+      <text x="35" y="142" fill="#5ec8ff" font-size="12" font-weight="700">LEVEL 3 &middot; Operations Control Center (Dubai Primary &amp; Abu Dhabi Backup SCADA)</text>
+      <text x="35" y="160" fill="#94a3b8" font-size="10">Redundant Master SCADA Servers &middot; Engineering Workstations &middot; Primary PI Historian &middot; Domain Controller (OT Active Directory)</text>
+
+      <!-- Level 2 Supervisory -->
+      <rect x="20" y="180" width="700" height="46" rx="6" fill="#131c33" stroke="#3b82f6" stroke-width="1.5"/>
+      <text x="35" y="202" fill="#60a5fa" font-size="11" font-weight="700">LEVEL 2 &middot; Station Supervisory (Compressor &amp; Terminal Local HMI)</text>
+      <text x="35" y="218" fill="#94a3b8" font-size="10">Siemens Comfort HMI &middot; Wonderware InTouch &middot; Local Historian &middot; OPC UA Station Gateways</text>
+
+      <!-- Level 1 Control -->
+      <rect x="20" y="234" width="700" height="46" rx="6" fill="#101827" stroke="#10b981" stroke-width="1.5"/>
+      <text x="35" y="254" fill="#34d399" font-size="11" font-weight="700">LEVEL 1 &middot; Controller &amp; Safety Layer (SIL-2/3 GuardLogix &amp; S7-1500H)</text>
+      <text x="35" y="270" fill="#94a3b8" font-size="10">Hot-Standby PLCs &middot; Solar RTUs (BVS-01 to BVS-08) &middot; Autonomous Line Break Detection (dP/dt)</text>
+
+      <!-- Level 0 Field -->
+      <rect x="20" y="288" width="700" height="34" rx="6" fill="#090d16" stroke="#475569" stroke-width="1"/>
+      <text x="35" y="310" fill="#cbd5e1" font-size="11" font-weight="600">LEVEL 0 &middot; Field Instrumentation &middot; Transmitters (PT, TT, FT), Actuators (ESDV, LBV), Solar Enclosures</text>
+    </svg>
+  </div>
+
+  <div class="card">
+    <h3>OT Firewall Conduit Rules Matrix (Allow List)</h3>
+    <p class="muted small">Zero-trust network access (ZTNA) policy: deny all by default; strictly allow dedicated ICS protocol conduits.</p>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Source Zone</th>
+            <th>Destination Zone</th>
+            <th>Protocol / Port</th>
+            <th>Permitted Traffic / Function</th>
+            <th>Security Profile</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>Level 1 (Solar RTU)</td><td>Level 3 (Master SCADA)</td><td><code>TCP 2404</code></td><td>IEC 60870-5-104 Telecontrol Telemetry (Spontaneous &amp; Cyclic)</td><td>Strict payload inspection, IPsec VPN</td></tr>
+          <tr><td>Level 1 (Remote BVS)</td><td>Level 3 (SCADA Front-End)</td><td><code>TCP 20000</code></td><td>DNP3 SAv5 (Secure Authentication with Message Integrity)</td><td>Whitelisted static IP / Port lock</td></tr>
+          <tr><td>Level 2 (Station HMI)</td><td>Level 3 (Historian)</td><td><code>TCP 4840</code></td><td>OPC UA (Encrypted Basic256Sha256 + Signed Certificates)</td><td>Client &amp; Server Certificate Exchanged</td></tr>
+          <tr><td>Level 1 (Controller)</td><td>Level 1 (Remote I/O)</td><td><code>TCP 502 / PROFINET</code></td><td>Modbus TCP / PROFINET S2 System Redundancy</td><td>Isolated dedicated OT industrial VLAN</td></tr>
+          <tr><td>Level 3 (NTP Master)</td><td>Level 1 &amp; 2 (All nodes)</td><td><code>UDP 123</code></td><td>Network Time Protocol (GPS Grandmaster Stratum-1 clock)</td><td>High-precision SOE time alignment</td></tr>
+          <tr><td>IDMZ Jump Host</td><td>Level 3 (Engineering WS)</td><td><code>TCP 3389 / 443</code></td><td>Secured Remote Access (MFA + Session Screen Recording)</td><td>Air-gapped dual-NIC proxy termination</td></tr>
+          <tr><td>Level 4 (Corporate ERP)</td><td>Level 3 (OT Network)</td><td><code>ANY</code></td><td><b style="color:var(--crit)">EXPLICIT DENY ALL</b> (No direct routing between IT and OT)</td><td>Stateful Inspection Drop &amp; Syslog Alert</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- ================= FACTORY ACCEPTANCE TESTING (FAT) ================= -->
+<section class="panel" id="tab-fat" role="tabpanel" aria-labelledby="tabbtn-fat">
+  <div class="panel-head">
+    <h2>Factory Acceptance Test (FAT) Protocol &amp; Execution</h2>
+    <p>Comprehensive pre-shipment verification procedures for redundant PLC panels, SCADA servers, and remote solar RTU skids prior to site delivery.</p>
+  </div>
+
+  <div class="card">
+    <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px">
+      <div>
+        <h3 style="margin:0">Staged FAT Test Modules &amp; Signoff Status</h3>
+        <p class="muted small" style="margin:0">Interactive testing tracker with test log notes and formal protocol export</p>
+      </div>
+      <div class="btn-row" style="margin:0">
+        <button class="btn primary" id="btnExportFatMd" type="button">Export FAT Protocol (Markdown)</button>
+        <button class="btn" id="btnResetFat" type="button">Reset FAT Records</button>
+      </div>
+    </div>
+    <div id="fatList" style="margin-top:14px"></div>
+  </div>
+</section>
+
 </main>
 
 <footer class="app-footer">
@@ -564,10 +757,10 @@
 </div>
 
 <script>
-/* Service worker registration */
+/* Service worker registration (separate from js/app.js init lifecycle) */
 if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.hostname === 'localhost')) {
   window.addEventListener('load', function () {
-    navigator.serviceWorker.register('sw.js', { scope: './' }).catch(function () {});
+    navigator.serviceWorker.register('sw.js', { scope: './' }).catch(function () { /* offline features unavailable */ });
   });
 }
 </script>
