@@ -1,0 +1,27 @@
+TYPE "typeTransmitter"
+VERSION : 0.1
+   STRUCT
+      rRawCount        : INT;
+      rLoop_mA         : REAL;
+      rProcessValue    : REAL;
+      rPreviousPV      : REAL;
+      rRateOfChange    : REAL;
+      rLRV             : REAL;
+      rURV             : REAL;
+      sEngUnit         : STRING[8];
+      rLimit_LL        : REAL;
+      rLimit_L         : REAL;
+      rLimit_H         : REAL;
+      rLimit_HH        : REAL;
+      rHysteresis      : REAL;
+      bAlarm_LL        : BOOL;
+      bAlarm_L         : BOOL;
+      bAlarm_H         : BOOL;
+      bAlarm_HH        : BOOL;
+      bNamur_Burnout   : BOOL;
+      bNamur_Short     : BOOL;
+      bSignalValid     : BOOL;
+      bSimulated       : BOOL;
+      bHoldLastGood    : BOOL;
+   END_STRUCT;
+END_TYPE

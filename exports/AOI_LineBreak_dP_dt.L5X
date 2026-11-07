@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<RSLogix5000Content SchemaRevision="1.0" SoftwareRevision="34.00" TargetName="AOI_LineBreak" TargetType="AddOnInstructionDefinition">
+<AddOnInstructionDefinitions>
+  <AddOnInstructionDefinition Name="AOI_LineBreak" Revision="1.0" ExecutePrescan="false" ExecutePostscan="false">
+    <Description>Autonomous Pipeline Rupture Detection via dP/dt Derivative with Transient Filtering</Description>
+    <Parameters>
+      <Parameter Name="EnableIn" DataType="BOOL" Usage="Input" Required="false" Visible="false"/>
+      <Parameter Name="EnableOut" DataType="BOOL" Usage="Output" Required="false" Visible="false"/>
+      <Parameter Name="In_Pressure_Bar" DataType="REAL" Usage="Input" Required="true" Visible="true"/>
+      <Parameter Name="In_Threshold_Rate" DataType="REAL" Usage="Input" Required="true" Visible="true"/>
+      <Parameter Name="In_SampleTime_s" DataType="REAL" Usage="Input" Required="true" Visible="true"/>
+      <Parameter Name="In_InhibitTransient" DataType="BOOL" Usage="Input" Required="true" Visible="true"/>
+      <Parameter Name="In_ResetTrip" DataType="BOOL" Usage="Input" Required="true" Visible="true"/>
+      <Parameter Name="Out_dP_dt" DataType="REAL" Usage="Output" Required="true" Visible="true"/>
+      <Parameter Name="Out_TripLineBreak" DataType="BOOL" Usage="Output" Required="true" Visible="true"/>
+      <Parameter Name="Out_PreAlarm" DataType="BOOL" Usage="Output" Required="true" Visible="true"/>
+    </Parameters>
+    <LocalTags>
+      <LocalTag Name="Pressure_Prev" DataType="REAL"/>
+      <LocalTag Name="FirstScanDone" DataType="BOOL"/>
+      <LocalTag Name="DeltaP" DataType="REAL"/>
+      <LocalTag Name="SampleTime_Clamped" DataType="REAL"/>
+    </LocalTags>
+    <Routines>
+      <Routine Name="Logic" Type="ST">
+        <STContent>
+          <Line Number="1"><![CDATA[SampleTime_Clamped := In_SampleTime_s;]]></Line>
+          <Line Number="2"><![CDATA[IF SampleTime_Clamped <= 0.001 THEN SampleTime_Clamped := 0.1; END_IF;]]></Line>
+          <Line Number="3"><![CDATA[IF NOT FirstScanDone THEN Pressure_Prev := In_Pressure_Bar; FirstScanDone := 1; RETURN; END_IF;]]></Line>
+          <Line Number="4"><![CDATA[DeltaP := Pressure_Prev - In_Pressure_Bar;]]></Line>
+          <Line Number="5"><![CDATA[Out_dP_dt := DeltaP / SampleTime_Clamped;]]></Line>
+          <Line Number="6"><![CDATA[Pressure_Prev := In_Pressure_Bar;]]></Line>
+          <Line Number="7"><![CDATA[IF NOT In_InhibitTransient THEN]]></Line>
+          <Line Number="8"><![CDATA[    IF Out_dP_dt >= In_Threshold_Rate THEN Out_TripLineBreak := 1; Out_PreAlarm := 1; END_IF;]]></Line>
+          <Line Number="9"><![CDATA[END_IF;]]></Line>
+          <Line Number="10"><![CDATA[IF In_ResetTrip THEN Out_TripLineBreak := 0; Out_PreAlarm := 0; END_IF;]]></Line>
+        </STContent>
+      </Routine>
+    </Routines>
+  </AddOnInstructionDefinition>
+</AddOnInstructionDefinitions>
+</RSLogix5000Content>

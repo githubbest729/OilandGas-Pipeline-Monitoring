@@ -1,0 +1,20 @@
+TYPE "typeValve"
+VERSION : 0.1
+   STRUCT
+      bCmdOpen         : BOOL;
+      bCmdClose        : BOOL;
+      bCmdReset        : BOOL;
+      bLimitOpen       : BOOL;
+      bLimitClosed     : BOOL;
+      bTorqueFault     : BOOL;
+      bLocalSelected   : BOOL;
+      bIsOpen          : BOOL;
+      bIsClosed        : BOOL;
+      bIsTransitioning : BOOL;
+      bTravelFault     : BOOL;
+      tStrokeTarget    : TIME;
+      tActualStroke    : TIME;
+      diCycleCount     : DINT;
+      rDifferentialP   : REAL;
+   END_STRUCT;
+END_TYPE
