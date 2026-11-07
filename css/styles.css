@@ -994,3 +994,99 @@ footer.app-footer {
   .tile .v { font-size: 2.3rem; }
   .hdr-main { flex-wrap: wrap; }
 }
+
+/* ==========================================================================
+   User-Friendly Calculator & Field Diagnostic Enhancements
+   ========================================================================== */
+.tip-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: rgba(94, 200, 255, 0.2);
+  color: var(--accent);
+  font-size: 11px;
+  font-weight: 800;
+  cursor: help;
+  margin-left: 5px;
+  vertical-align: middle;
+}
+.field-hint {
+  display: block;
+  font-size: 0.72rem;
+  color: var(--muted);
+  margin-top: 3px;
+}
+.calc-mode-bar {
+  background: linear-gradient(135deg, rgba(16, 185, 129, 0.08) 0%, rgba(14, 21, 38, 0.8) 100%);
+  border-left: 4px solid var(--ok);
+}
+.energy-bar-container {
+  margin: 14px 0 8px;
+  padding: 10px;
+  background: rgba(0, 0, 0, 0.3);
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--line);
+}
+.energy-bar-track {
+  height: 16px;
+  border-radius: var(--radius-pill);
+  background: #111827;
+  display: flex;
+  overflow: hidden;
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.5);
+}
+.pipe-strip-wrap {
+  background: #040814;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  padding: 14px;
+}
+.pipe-track {
+  position: relative;
+  height: 16px;
+  background: #1e293b;
+  border-radius: var(--radius-pill);
+  overflow: visible;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+.pipe-fill-flow {
+  height: 100%;
+  background: linear-gradient(90deg, #0284c7, #00e5ff);
+  border-radius: var(--radius-pill);
+  opacity: 0.85;
+}
+.pipe-target-pin {
+  position: absolute;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 5;
+}
+.pin-marker {
+  font-size: 20px;
+  filter: drop-shadow(0 0 8px #ff2d6f);
+}
+.pin-pulse {
+  position: absolute;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: rgba(255, 45, 111, 0.45);
+  animation: pulseBeacon 1.2s infinite ease-out;
+}
+.calc-collapsible summary {
+  padding: 8px 12px;
+  background: rgba(255, 255, 255, 0.04);
+  border-radius: var(--radius-xs);
+  border: 1px solid var(--line);
+  transition: all 0.2s ease;
+}
+.calc-collapsible summary:hover {
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--accent);
+}
