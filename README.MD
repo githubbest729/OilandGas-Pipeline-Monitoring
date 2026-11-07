@@ -86,4 +86,3 @@ The application models standard UAE/GCC pipeline SCADA field architectures:
 
 ```
 
----
