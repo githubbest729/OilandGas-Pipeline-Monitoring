@@ -3,68 +3,52 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="theme-color" content="#000000">
-<title>Offline | Pipeline SCADA Field Guide</title>
+<title>Offline Mode - Pipeline SCADA Field Guide</title>
 <style>
-  :root { color-scheme: dark; }
-  * { box-sizing: border-box; }
   body {
-    margin: 0; background: #000; color: #ffff00; font: 700 17px/1.5 -apple-system, "SF Pro Text", Inter, Roboto, sans-serif;
-    padding: calc(18px + env(safe-area-inset-top)) calc(16px + env(safe-area-inset-right)) calc(28px + env(safe-area-inset-bottom)) calc(16px + env(safe-area-inset-left));
+    background: #0B132B;
+    color: #F8FAFC;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    margin: 0;
+    padding: 24px;
+    box-sizing: border-box;
+    text-align: center;
   }
-  h1 { font-size: 1.7rem; margin: 0 0 6px; }
-  h2 { font-size: 1.15rem; color: #00e5ff; margin: 22px 0 8px; }
-  .box { border: 3px solid #ffff00; border-radius: 14px; padding: 14px 16px; margin: 14px 0; }
-  .banner { background: #ffff00; color: #000; padding: 10px 14px; border-radius: 10px; font-weight: 900; letter-spacing: .04em; text-transform: uppercase; }
-  ol, ul { margin: 6px 0 0; padding-left: 22px; }
-  li { margin-bottom: 8px; }
-  button, a.btn { display: inline-block; background: #ffff00; color: #000; border: 0; border-radius: 12px; font: 900 1rem inherit; padding: 14px 20px; text-decoration: none; margin-top: 10px; }
-  table { width: 100%; border-collapse: collapse; }
-  td, th { border: 2px solid #ffff00; padding: 8px; text-align: left; font-size: .95rem; }
-  th { color: #00e5ff; }
-  .small { font-size: .85rem; font-weight: 600; opacity: .9; }
+  .card {
+    background: #1C2541;
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 16px;
+    padding: 32px 24px;
+    max-width: 480px;
+    width: 100%;
+  }
+  h1 { font-size: 1.5rem; margin-top: 16px; color: #5EC8FF; }
+  p { font-size: 0.95rem; line-height: 1.5; color: #9AA5BD; }
+  .btn {
+    display: inline-block;
+    background: #00E5FF;
+    color: #05080F;
+    font-weight: 700;
+    padding: 12px 24px;
+    border-radius: 8px;
+    text-decoration: none;
+    margin-top: 20px;
+  }
 </style>
 </head>
 <body>
-  <div class="banner">No network. Offline emergency reference</div>
-  <h1>Pipeline SCADA Field Guide</h1>
-  <p class="small">The full guide could not be loaded and is not yet stored on this device. Open the app once while online to cache everything. Quick reference below.</p>
-
-  <div class="box">
-    <h2 style="margin-top:0">Safety first: suspected pipeline leak or line break</h2>
-    <ol>
-      <li>Stop. Do not approach if you smell hydrocarbons, see a vapour cloud, or hear gas escaping. Treat the area as hazardous (H2S possible).</li>
-      <li>Upwind and uphill. Keep vehicles off the ROW and switch off ignition sources and phones near the site.</li>
-      <li>Alert the control room by radio/satellite phone. Give pipeline name, nearest valve station, and what you observe.</li>
-      <li>Confirm LBV/ESDV closure from the RTU panel local indicators only if it is safe to do so. Never bypass an ESD to restore flow.</li>
-      <li>Follow the site Emergency Response Plan and your permit-to-work. Await instructions from the incident controller.</li>
-    </ol>
-  </div>
-
-  <div class="box">
-    <h2 style="margin-top:0">4&ndash;20 mA / NAMUR NE43 quick table</h2>
-    <table>
-      <tr><th>Current</th><th>Meaning</th></tr>
-      <tr><td>&le; 3.6 mA</td><td>Fault: burnout or open loop</td></tr>
-      <tr><td>3.8 &ndash; 4.0 mA</td><td>Under-range measurement</td></tr>
-      <tr><td>4 &ndash; 20 mA</td><td>Valid process range</td></tr>
-      <tr><td>20 &ndash; 20.5 mA</td><td>Over-range measurement</td></tr>
-      <tr><td>&ge; 21 mA</td><td>Fault: short circuit / saturation</td></tr>
-    </table>
-    <p class="small">PV = LRV + (mA &minus; 4) / 16 &times; (URV &minus; LRV)</p>
-  </div>
-
-  <div class="box">
-    <h2 style="margin-top:0">Remote RTU station checks</h2>
-    <ul>
-      <li>Battery voltage above low-voltage alarm; solar panel clean and unshaded.</li>
-      <li>Enclosure sealed, no moisture, no insect or dust ingress; SPD status indicators healthy.</li>
-      <li>Comms: note VSAT/cellular signal margin and last successful poll time.</li>
-      <li>Log all findings on paper and sync when the connection returns.</li>
-    </ul>
-  </div>
-
-  <button type="button" onclick="location.reload()">Retry connection</button>
-  <a class="btn" href="./" style="margin-left:8px">Open guide</a>
+<div class="card">
+  <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="#FFC400" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M1 1l22 22M16.72 11.06A10.94 10.94 0 0119 12.55M5 12.55a10.94 10.94 0 015.17-2.39M10.71 5.05A16 16 0 0122.58 9M1.42 9a15.91 15.91 0 014.7-2.88M8.53 16.11a6 6 0 016.95 0M12 20h.01"/>
+  </svg>
+  <h1>Desert Field Offline Mode</h1>
+  <p>You are disconnected from the network. Pre-cached telemetry calculators and SAT checklists remain completely functional.</p>
+  <a class="btn" href="./index.html">Open Cached Application</a>
+</div>
 </body>
 </html>

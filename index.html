@@ -292,7 +292,7 @@
       <div class="abar" id="ab-press" data-zone="spec">
         <div class="abar-head"><span>PT-101 Trunkline pressure</span><b id="ab-press-v">64.2 bar</b></div>
         <div class="abar-track"><div class="abar-zones"><i class="z-trip" style="width:20%"></i><i class="z-warn" style="width:10%"></i><i class="z-spec" style="width:40%"></i><i class="z-warn" style="width:10%"></i><i class="z-trip" style="width:20%"></i></div><div class="abar-fill" id="ab-press-f" style="width:64%"></div><div class="abar-mark" id="ab-press-m" style="left:64%"></div></div>
-        <div class="abar-scale"><span>0</span><span>25</span><span>50</span><span>75</span><span>100 bar</span></div>
+        <div class="abar-scale"><span>0</span><span>25</span><span>50</span><span>70</span><span>100 bar</span></div>
       </div>
       <div class="abar" id="ab-dp" data-zone="spec">
         <div class="abar-head"><span>PDT-105 DP across LBV-04</span><b id="ab-dp-v">0.12 bar</b></div>
@@ -309,7 +309,7 @@
       <div class="glyph-row">
         <button class="vg" type="button" data-tag="ESD-01" data-state="open"><svg viewBox="0 0 56 40"><polygon class="body" points="8,6 28,20 8,34"/><polygon class="body" points="48,6 28,20 48,34"/></svg><span class="t">ESD-01</span><span class="s">Open</span></button>
         <button class="vg" type="button" data-tag="MOV-102" data-state="closed"><svg viewBox="0 0 56 40"><polygon class="body" points="8,6 28,20 8,34"/><polygon class="body" points="48,6 28,20 48,34"/></svg><span class="t">MOV-102</span><span class="s">Closed</span></button>
-        <button class="vg" type="button" data-tag="LBV-04" data-state="transit"><svg viewBox="0 0 56 40"><defs><linearGradient id="halfFill" x1="0" x2="1"><stop offset="0.5" stop-color="#22d3ee" stop-opacity=".5"/><stop offset="0.5" stop-color="#22d3ee" stop-opacity="0"/></linearGradient></defs><polygon class="body" points="8,6 28,20 8,34"/><polygon class="body" points="48,6 28,20 48,34"/></svg><span class="t">LBV-04</span><span class="s">Transitioning</span></button>
+        <button class="vg" type="button" data-tag="LBV-04" data-state="transit"><svg viewBox="0 0 56 40"><polygon class="body" points="8,6 28,20 8,34"/><polygon class="body" points="48,6 28,20 48,34"/></svg><span class="t">LBV-04</span><span class="s">Transitioning</span></button>
         <button class="vg" type="button" data-tag="LBV-05" data-state="fault"><svg viewBox="0 0 56 40"><polygon class="body" points="8,6 28,20 8,34"/><polygon class="body" points="48,6 28,20 48,34"/></svg><span class="t">LBV-05</span><span class="s">Travel fault</span></button>
       </div>
 
@@ -348,12 +348,6 @@
       <li><b>Action:</b> close the LBV on both sides of the break. Closure must not depend on comms. The RTU holds the trip latched until a deliberate reset.</li>
       <li><b>Surge:</b> upstream closure timing must limit surge below the MAOP margin. Verify stroke times during PST and SAT.</li>
       <li><b>Bypass:</b> time-limited, logged, and visible on every HMI level.</li>
-    </ul>
-    <h3 style="margin-top:14px">RTTM and mass-balance leak detection (LDS)</h3>
-    <ul class="clean">
-      <li><b>Mass balance:</b> compensated inlet vs. outlet flow with line-pack correction. Simple, robust, slow for small leaks.</li>
-      <li><b>RTTM:</b> a hydraulic model runs in parallel with measured data; residuals between model and measurements flag leaks and locate them. Needs good instrumentation and model tuning.</li>
-      <li>API RP 1130 (computational pipeline monitoring), API RP 1155 and API 1175 (leak detection programme) are the usual references. Specify sensitivity, reliability, robustness and accuracy as separate acceptance criteria and prove them in testing.</li>
     </ul>
   </div>
 </section>
@@ -570,10 +564,10 @@
 </div>
 
 <script>
-/* Service worker registration (separate from js/app.js init lifecycle) */
+/* Service worker registration */
 if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.hostname === 'localhost')) {
   window.addEventListener('load', function () {
-    navigator.serviceWorker.register('sw.js', { scope: './' }).catch(function () { /* offline features unavailable */ });
+    navigator.serviceWorker.register('sw.js', { scope: './' }).catch(function () {});
   });
 }
 </script>
