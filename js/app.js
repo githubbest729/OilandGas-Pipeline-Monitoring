@@ -404,6 +404,10 @@ function renderNamurBlock(mA, lrv, urv, unit) {
   var pv = pvFromMa(mA, lrv, urv);
   var s7 = s7Counts(mA), ab = abCounts(mA);
   var span = urv - lrv, pct = span !== 0 ? (pv - lrv) / span * 100 : 0;
+  var plcCountsEl = $('#ma-plc-counts');
+  if (plcCountsEl) {
+    plcCountsEl.innerHTML = '<div class="kv"><span>Siemens S7 Integer (0-27648)</span><span>' + s7.v + ' (' + s7.note + ')</span><span>Rockwell Logix (0-32767)</span><span>' + ab + '</span><span>Analog Input %</span><span>' + fmt(pct, 1) + ' %</span></div>';
+  }
   return '<div class="big">' + fmt(pv, Math.abs(span) >= 100 ? 2 : 3) + ' <small>' + esc(unit) + '</small></div>' +
     '<div style="margin:6px 0"><span class="status-pill ' + z.pill + '">' + esc(z.name) + '</span></div>' +
     '<div class="kv"><span>Loop current</span><span>' + fmt(mA, 2) + ' mA</span>' +
@@ -423,7 +427,7 @@ var PRESETS = {
     dubai: { 'ma-ma': 8, 'ma-lrv': 0, 'ma-urv': 60, 'ma-unit': 'bar' }
   },
   hd: {
-    crude: { 'hd-sg': 0.85, 'hd-flow': 1500, 'hd-len': 120, 'hd-dia': 600, 'hd-dz': 150, 'hd-visc': 12, 'hd-pin': 60 },
+    crude: { 'hd-sg': 0.85, 'hd-flow': 2000, 'hd-len': 60, 'hd-dia': 750, 'hd-dz': 65, 'hd-visc': 12, 'hd-pin': 60 },
     gas: { 'hd-sg': 0.5, 'hd-flow': 3000, 'hd-len': 200, 'hd-dia': 900, 'hd-dz': 80, 'hd-visc': 0.6, 'hd-pin': 90 },
     dubai: { 'hd-sg': 0.87, 'hd-flow': 1000, 'hd-len': 45, 'hd-dia': 500, 'hd-dz': 20, 'hd-visc': 9, 'hd-pin': 35 }
   },
@@ -458,12 +462,13 @@ function swameeJain(re, eps, d) {
   var t = Math.log10(eps / (3.7 * d) + 5.74 / Math.pow(re, 0.9));
   return 0.25 / (t * t);
 }
+/* 8.2 hydrostatic + friction + line pack with Visual Energy Loss Bar */
 function calcHd() {
   var sg = numVal('#hd-sg', 0.85, LIM.SG[0], LIM.SG[1]);
   var Q = numVal('#hd-flow', 2000, LIM.FLOW[0], LIM.FLOW[1]);
-  var L = numVal('#hd-len', 120, LIM.LEN_KM[0], LIM.LEN_KM[1]);
-  var Dmm = numVal('#hd-dia', 500, LIM.DIA_MM[0], LIM.DIA_MM[1]);
-  var dz = numVal('#hd-dz', 150, -3000, 3000);
+  var L = numVal('#hd-len', 60, LIM.LEN_KM[0], LIM.LEN_KM[1]);
+  var Dmm = numVal('#hd-dia', 750, LIM.DIA_MM[0], LIM.DIA_MM[1]);
+  var dz = numVal('#hd-dz', 65, -3000, 3000);
   var nu = numVal('#hd-visc', 12, 0.2, 2000);
   var pin = numVal('#hd-pin', 60, LIM.PRESS_BAR[0], LIM.PRESS_BAR[1]);
   var unitEl = $('#hd-unit'); var psi = !!(unitEl && unitEl.value === 'psi');
@@ -484,27 +489,37 @@ function calcHd() {
   var packExtra = Vol * rho * (pAvg * 1e5) / K;
   var packPerBar = Vol * rho * 1e5 / K;
 
-  var notes = [];
-  if (pout < 0) notes.push('Inlet pressure is insufficient: the outlet would be below atmospheric (slack-line / vapour risk). Raise inlet pressure or add a pump station.');
-  if (v > 3) notes.push('Velocity above 3 m/s: check erosion limits and surge (water-hammer) margins.');
-  if (v < 0.5) notes.push('Velocity below 0.5 m/s: risk of water or sediment drop-out and poor leak-detection sensitivity.');
-  if (sg <= 0.6) notes.push('Liquid-equivalent approximation. For compressible gas use a gas-flow model (AGA / Panhandle) or a transient simulator.');
-  var status = pout < 0 ? '<span class="status-pill crit">Insufficient inlet pressure</span>' : (v > 3 || v < 0.5) ? '<span class="status-pill warn">Check velocity</span>' : '<span class="status-pill ok">Within typical limits</span>';
+  var pctRem = Math.max(0, Math.min(100, (pout / pin) * 100));
+  var pctElev = Math.max(0, Math.min(100, (dpHydro / pin) * 100));
+  var pctFric = Math.max(0, Math.min(100, (dpFric / pin) * 100));
+
+  var isHealthy = pout > 10;
+  var status = pout < 0 ? '<span class="status-pill crit">Insufficient inlet pressure</span>' : (pout < 10 ? '<span class="status-pill warn">Low outlet margin</span>' : '<span class="status-pill ok">Optimal Flowing Pressure</span>');
+
+  var energyBarHtml = '<div class="energy-bar-container" style="margin:12px 0 8px">' +
+    '<div style="display:flex;justify-content:space-between;font-size:0.75rem;margin-bottom:4px" class="muted">' +
+      '<span>Remaining: ' + pctRem.toFixed(0) + '%</span>' +
+      '<span>Hill Rise Loss: ' + pctElev.toFixed(0) + '%</span>' +
+      '<span>Friction Loss: ' + pctFric.toFixed(0) + '%</span>' +
+    '</div>' +
+    '<div class="energy-bar-track" style="height:14px;border-radius:4px;background:#151e33;display:flex;overflow:hidden">' +
+      '<div style="width:' + pctRem.toFixed(1) + '%;background:var(--ok)" title="Remaining Pressure"></div>' +
+      '<div style="width:' + pctElev.toFixed(1) + '%;background:var(--warn)" title="Elevation Loss"></div>' +
+      '<div style="width:' + pctFric.toFixed(1) + '%;background:var(--crit)" title="Friction Loss"></div>' +
+    '</div></div>';
+
   setHTML('#hd-out',
-    '<div class="big">' + fmt(dpTot * cf, 1) + ' <small>' + ul + ' total pressure drop</small></div>' +
+    '<div class="big" style="color:' + (isHealthy ? 'var(--ok)' : (pout < 0 ? 'var(--crit)' : 'var(--warn)')) + '">' + fmt(pout * cf, 1) + ' <small>' + ul + ' Remaining Outlet Pressure</small></div>' +
     '<div style="margin:6px 0">' + status + '</div>' +
-    '<div class="kv"><span>Hydrostatic (' + (dz >= 0 ? 'rise' : 'fall') + ' ' + fmt(Math.abs(dz), 0) + ' m)</span><span>' + fmt(dpHydro * cf, 2) + ' ' + ul + '</span>' +
-    '<span>Friction (Darcy-Weisbach)</span><span>' + fmt(dpFric * cf, 2) + ' ' + ul + '</span>' +
-    '<span>Outlet pressure</span><span>' + fmt(pout * cf, 1) + ' ' + ul + ' g</span>' +
-    '<span>Velocity / Reynolds</span><span>' + fmt(v, 2) + ' m/s / ' + fmt(Re, 0) + '</span>' +
-    '<span>Friction factor</span><span>' + fmt(f, 4) + '</span>' +
-    '<span>Pipe volume</span><span>' + fmt(Vol, 0) + ' m&sup3; (' + fmt(Vol * 6.28981, 0) + ' bbl)</span>' +
-    '<span>Line-pack mass (atm. basis)</span><span>' + fmt(mass / 1000, 0) + ' t</span>' +
-    '<span>Extra pack at avg ' + fmt(pAvg * cf, 1) + ' ' + ul + '</span><span>' + fmt(packExtra / 1000, 1) + ' t</span>' +
-    '<span>Pack / unpack sensitivity</span><span>' + fmt(packPerBar / 1000, 2) + ' t per bar</span></div>' +
-    (notes.length ? '<div class="note warn" style="margin-bottom:0">' + notes.map(esc).join('<br>') + '</div>' : '<div class="note" style="margin-bottom:0">Plain English: this is the pressure you spend pushing product up the hill plus the pressure lost to pipe friction. The line-pack figure is the extra product squeezed into the pipe by pressure; it moves in and out as pressure changes, which a leak detector must compensate for.</div>'));
-}
-CALC_FN.hd = calcHd;
+    energyBarHtml +
+    '<div class="kv"><span>Initial Starting Pressure</span><span>' + fmt(pin * cf, 1) + ' ' + ul + '</span>' +
+    '<span>Elevation Head Loss (&Delta;h = ' + dz + ' m)</span><span>-' + fmt(dpHydro * cf, 2) + ' ' + ul + '</span>' +
+    '<span>Pipe Friction Loss (Darcy-Weisbach)</span><span>-' + fmt(dpFric * cf, 2) + ' ' + ul + '</span>' +
+    '<span>Fluid Flow Velocity</span><span>' + fmt(v, 2) + ' m/s (Re: ' + fmt(Re, 0) + ')</span>' +
+    '<span>Pipe Inventory Volume</span><span>' + fmt(Vol, 0) + ' m&sup3; (' + fmt(mass / 1000, 0) + ' metric tons)</span>' +
+    '<span>Line-Pack Sensitivity</span><span>' + fmt(packPerBar / 1000, 2) + ' t per bar</span></div>' +
+    (pout < 0 ? '<div class="note warn" style="margin-bottom:0">Inlet pressure is insufficient: the outlet would be below atmospheric. Raise starting pressure or add an intermediate booster pump.</div>' : '<div class="note" style="margin-bottom:0"><b>Plain English:</b> Pumping uphill consumes ' + fmt(dpHydro * cf, 1) + ' ' + ul + ', and pipe friction consumes ' + fmt(dpFric * cf, 1) + ' ' + ul + '. The remaining ' + fmt(pout * cf, 1) + ' ' + ul + ' is available pressure at the end of the line.</div>'));
+}CALC_FN.hd = calcHd;
 
 /* 8.3 leak sensitivity */
 function calcLk() {
@@ -1112,9 +1127,16 @@ function rtInject() {
   var P = rtParams(), aTrue = P.a * (1 + (Math.random() * 2 - 1) * RT_DA), xl = P.L * P.pos;
   RT.leak = { t0: RT.t, x: xl, aTrue: aTrue, P: P, tIn: RT.t + xl * 1000 / aTrue, tOut: RT.t + (P.L - xl) * 1000 / aTrue,
               jIn: Math.random() * RT_DT, jOut: Math.random() * RT_DT, dP: rtDeltaP(P, aTrue), q: P.size * RT_M0 };
-  fx.alarm(); toast('Leak injected at ' + fmt(xl, 2) + ' km (hidden). Watch the negative pressure wave.');
+  fx.alarm(); toast('Leak injected at ' + fmt(xl, 2) + ' km. Watch the negative pressure wave.');
+  var pin = $('#pipeTargetPin'); if (pin) { pin.style.display = 'block'; pin.style.left = (P.pos * 100).toFixed(1) + '%'; }
+  setText('#pipeRuptureLabel', 'RUPTURE at KM ' + fmt(xl, 1) + ' (' + (P.pos * 100).toFixed(0) + '%)');
 }
-function rtReset() { RT.t = 0; RT.leak = null; if (RT.loop) RT.loop.dirty = true; }
+function rtReset() {
+  RT.t = 0; RT.leak = null;
+  var pin = $('#pipeTargetPin'); if (pin) pin.style.display = 'none';
+  setText('#pipeRuptureLabel', 'Awaiting Simulation');
+  if (RT.loop) RT.loop.dirty = true;
+}
 function rtSample(tau, ch, lk) {
   var n = rtNoise(Math.floor(tau * 10), ch), v;
   if (ch === 0) { v = RT_M0 + n * 1.2; if (lk && tau > lk.tIn) v += 0.35 * lk.q * (1 - Math.exp(-(tau - lk.tIn) / 8)); return v; }
@@ -1814,6 +1836,43 @@ function init() {
   });
   ['ma-lrv', 'ma-urv', 'ma-unit'].forEach(function (id) { on('#' + id, 'input', calcMa); });
   on('#hd-unit', 'change', calcHd);
+
+  // user-friendly vs pro mode switch
+  on('#btnModeBeginner', 'click', function () {
+    $('#btnModeBeginner').classList.add('active');
+    $('#btnModePro').classList.remove('active');
+    $$('.pro-field').forEach(function (el) { el.style.display = 'none'; });
+    setText('#calcModeBadge', '🌱 Beginner Friendly Active');
+    setText('#calcModeDesc', 'Plain-English explanations, visual loss bars, and guided tooltips enabled.');
+    toast('Switched to Beginner Friendly mode');
+  });
+  on('#btnModePro', 'click', function () {
+    $('#btnModePro').classList.add('active');
+    $('#btnModeBeginner').classList.remove('active');
+    $$('.pro-field').forEach(function (el) { el.style.display = ''; });
+    setText('#calcModeBadge', '⚙️ Pro Engineering Active');
+    setText('#calcModeDesc', 'Showing complete thermodynamic formulas, raw registers, and boundary parameters.');
+    toast('Switched to Pro Engineering mode');
+  });
+
+  // quick jump buttons for NAMUR NE43
+  on('#btnNmBroken', 'click', function () { setVal('#nm-slider', 0); updateNamurViz(); });
+  on('#btnNmUnder', 'click', function () { setVal('#nm-slider', 3.9); updateNamurViz(); });
+  on('#btnNmHealthy', 'click', function () { setVal('#nm-slider', 12.0); updateNamurViz(); });
+  on('#btnNmOver', 'click', function () { setVal('#nm-slider', 20.3); updateNamurViz(); });
+  on('#btnNmShort', 'click', function () { setVal('#nm-slider', 22.5); updateNamurViz(); });
+
+  // quick booster toggle on elevation chart
+  on('#btnBoostOn', 'click', function () {
+    setVal('#el-pd', 85);
+    elUpdate();
+    toast('PS-2 Booster Pump set to 85 bar - HGL lifted clear of mountain crest');
+  });
+  on('#btnBoostReset', 'click', function () {
+    setVal('#el-pd', 45);
+    elUpdate();
+  });
+
   calcMa(); calcHd(); calcLk();
 
   buildNamurBar(); on('#nm-slider', 'input', updateNamurViz); updateNamurViz();
