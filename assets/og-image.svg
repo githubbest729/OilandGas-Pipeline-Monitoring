@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" width="1200" height="630">
+  <rect width="1200" height="630" fill="#070b16" />
+  <path d="M 0 450 Q 300 380 600 450 T 1200 450" fill="none" stroke="rgba(94,200,255,0.15)" stroke-width="4" />
+  <path d="M 100 350 H 450 V 250 H 750 V 350 H 1100" fill="none" stroke="#5ec8ff" stroke-width="16" stroke-linecap="round" />
+  <circle cx="600" cy="250" r="28" fill="#00e5ff" stroke="#ffffff" stroke-width="6" />
+  <text x="100" y="140" fill="#ffffff" font-family="-apple-system, sans-serif" font-size="48" font-weight="800">Oil & Gas Pipeline Monitoring</text>
+  <text x="100" y="195" fill="#5ec8ff" font-family="-apple-system, sans-serif" font-size="28" font-weight="600">SCADA Engineering Field Guide · AGAC Dubai</text>
+  <rect x="100" y="520" width="180" height="40" rx="8" fill="rgba(0,229,255,0.15)" stroke="#00e5ff" />
+  <text x="190" y="546" fill="#00e5ff" font-family="monospace" font-size="16" font-weight="700" text-anchor="middle">IEC 60870-5-104</text>
+  <rect x="300" y="520" width="160" height="40" rx="8" fill="rgba(245,158,11,0.15)" stroke="#f59e0b" />
+  <text x="380" y="546" fill="#f59e0b" font-family="monospace" font-size="16" font-weight="700" text-anchor="middle">ISA-101 HMI</text>
+  <rect x="480" y="520" width="160" height="40" rx="8" fill="rgba(16,185,129,0.15)" stroke="#10b981" />
+  <text x="560" y="546" fill="#10b981" font-family="monospace" font-size="16" font-weight="700" text-anchor="middle">SIL-2 / SIL-3</text>
+</svg>

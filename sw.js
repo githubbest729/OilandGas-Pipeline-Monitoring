@@ -1,4 +1,4 @@
-const CACHE_NAME = 'og-scada-pwa-v1.0.0';
+const CACHE_NAME = 'og-scada-pwa-v2.0.0';
 
 const ASSETS_TO_CACHE = [
   './',
@@ -11,7 +11,6 @@ const ASSETS_TO_CACHE = [
   './icons/icon-192.svg',
   './icons/icon-512.svg',
   './icons/icon-maskable.svg',
-  './icons/apple-touch-icon.png',
   './assets/og-image.svg'
 ];
 
